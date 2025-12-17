@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:url('Akka.png') center/cover no-repeat;
+  font-family:Arial, sans-serif;
+  overflow:hidden;
+  transition:background 1s ease-in-out;
+}
+
+.box{
+  text-align:center;
+  background:rgba(0,0,0,0.55);
+  padding:30px 40px;
+  border-radius:20px;
+  color:white;
+  position:relative;
+}
+
+.start-btn{
+  padding:18px 45px;
+  font-size:26px;
+  border:none;
+  border-radius:50px;
+  background:linear-gradient(135deg,#ff512f,#dd2476);
+  color:white;
+  cursor:pointer;
+  font-weight:bold;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.1);}
+  100%{transform:scale(1);}
+}
+
+.count{font-size:90px;font-weight:bold;}
+.date{font-size:42px;font-weight:bold;}
+
+.wish{
+  font-size:48px;
+  margin:15px 0;
+  font-family:'Pacifico', cursive;
+  color:#ffd700;
+  text-shadow:2px 2px 8px rgba(0,0,0,0.6);
+}
+
+.tomjerry{
+  position:absolute;
+  top:-110px;
+  left:50%;
+  transform:translateX(-50%);
+  width:150px;
+}
+
+.cake{
+  width:160px;
+  display:block;
+  margin:20px auto;
+  animation:float 2s infinite ease-in-out;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-20px);}
+}
+
+.confetti{
+  position:fixed;
+  width:8px;
+  height:8px;
+  animation:fall linear infinite;
+}
+
+@keyframes fall{
+  from{top:-10px;}
+  to{top:110vh;}
+}
+
+.balloon{
+    position:fixed;
+  bottom:-100px;
+  width:50px;
+  height:65px;
+  border-radius:50%;
+  animation:balloonUp linear infinite;
+}
+
+.balloon::after{
+  content:"";
+  position:absolute;
+  width:2px;
+  height:40px;
+  background:#fff;
+  left:50%;
+  top:65px;
+}
+
+@keyframes balloonUp{
+  from{transform:translateY(0);}
+  to{transform:translateY(-120vh);}
+}
+
+/* Gift Container */
+.gift-container{
+  background: rgba(255,255,255,0.2);
+  padding: 20px 30px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.gift-container:hover{
+  transform: scale(1.05);
+}
+
+.gift-container span{
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 1px 1px 4px #000;
+}
+
+.gift-container img{
+  width: 80px;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgmusic" src="bgmusic.mp3" loop></audio>
+
+<div class="box" id="content">
+  <button class="start-btn" onclick="startShow()">▶ START</button>
+</div>
+
+<script>
+const music = document.getElementById("bgmusic");
+
+function startShow(){
+  const box = document.getElementById("content");
+  let count = 3;
+
+  box.innerHTML = `<div class="count" id="count">3</div>`;
+  const countEl = document.getElementById("count");
+
+  const timer = setInterval(()=>{
+    count--;
+    if(count>0){
+      countEl.textContent = count;
+    }else{
+      clearInterval(timer);
+
+      // Start music after countdown finishes
+      music.play().catch(()=>{});
+
+      // Show Date page immediately
+      document.body.style.background = "url('akka2.png') center/cover no-repeat";
+      box.innerHTML = `<div class="date">🎂 18 Dec 2025 🎂</div>`;
+
+      // After 4 seconds, show Birthday page
+      setTimeout(()=>{
+        document.body.style.background = "url('akka3.png') center/cover no-repeat";
+
+        createConfetti();
+        createBalloons();
+        startBgSlideshow();
+
+        box.innerHTML = `
+          <img src="tom.gif" class="tomjerry">
+          <div class="wish">🎉 Happy Birthday 🎂</div>
+  
+
+          <!-- Single Gift Box -->
+          <div class="gift-container" onclick="openGift()">
+            <span>🎁 Gift</span>
+            
+          </div>
+        `;
+      },4000);
+    }
+  },1000);
+}
+
+// Background slideshow
+const bgImages = ["akka3.png","Akka.png","akka2.png"];
+let bgIndex = 0;
+function startBgSlideshow(){
+  setInterval(()=>{
+    bgIndex = (bgIndex+1) % bgImages.length;
+    document.body.style.background =
+      `url('${bgImages[bgIndex]}') center/cover no-repeat`;
+  },4000);
+}
+
+// Confetti
+function createConfetti(){
+  for(let i=0;i<80;i++){
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=`hsl(${Math.random()*360},100%,50%)`;
+    c.style.animationDuration=(Math.random()*2+2)+"s";
+    document.body.appendChild(c);
+  }
+}
+
+// Balloons
+function createBalloons(){
+  for(let i=0;i<20;i++){
+    let b=document.createElement("div");
+    b.className="balloon";
+    b.style.left=Math.random()*100+"vw";
+    b.style.background=`hsl(${Math.random()*360},80%,60%)`;
+    b.style.animationDuration=(Math.random()*5+6)+"s";
+    document.body.appendChild(b);
+  }
+}
+
+// Open gift page
+function openGift(){
+  window.location.href="video.html";
+}
+</script>
+
+</body>
+</html>

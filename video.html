@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Player</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#000;
+}
+
+button{
+  padding:15px 25px;
+  font-size:18px;
+  border:none;
+  border-radius:8px;
+  background:#ff4081;
+  color:#fff;
+}
+
+iframe{
+  width:95%;
+  max-width:500px;
+  height:280px;
+  display:none;
+  border:none;
+}
+</style>
+</head>
+
+<body>
+
+<button onclick="play()">▶ Play Video</button>
+
+<iframe id="v" allow="autoplay"></iframe>
+
+<script>
+function play(){
+  // Correct Drive FILE ID
+  var fileId = "1fE_TDMw08hlC-2X8NlorAm4221BDlZ0i";
+  
+  var iframe = document.getElementById("v");
+  
+  // Correct URL: /preview at the end, proper string
+  iframe.src = "https://drive.google.com/file/d/" + fileId + "/preview";
+  iframe.style.display = "block";
+}
+</script>
+
+</body>
+</html>
